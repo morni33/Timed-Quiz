@@ -8,7 +8,7 @@ let score = 0;
 let timeLeft = 60;
 let timerInterval;
 
-// Your questions array will go here
+// Your questions array
 const questions = [
     {
         question: "What is the capital of France?",
@@ -32,9 +32,10 @@ const questions = [
     },
 ];
 
+
 function displayTimer() {
-    timerDisplay.textContent = `Time Left: ${timeLeft} seconds`; // Set the timer text
-    document.body.appendChild(timerDisplay); // Append the timer to the body
+    timerDisplay.textContent = `Time Left: ${timeLeft} seconds`;
+    document.body.appendChild(timerDisplay);
     timerDisplay.style.position = 'absolute';
     timerDisplay.style.top = '20px';
     timerDisplay.style.right = '20px';
@@ -44,7 +45,7 @@ function startQuiz() {
     startButton.classList.add('hide');
     questionContainer.classList.remove('hide');
     displayNextQuestion();
-    displayTimer(); // Display the timer
+    displayTimer();
     startTimer();
 }
 
@@ -53,7 +54,7 @@ function displayNextQuestion() {
         const currentQuestion = questions[currentQuestionIndex];
         questionContainer.innerHTML = `
             <h2>${currentQuestion.question}</h2>
-            ${currentQuestion.answers.map((answer, index) =>
+            ${currentQuestion.answers.map(answer =>
             `<button onclick="checkAnswer('${answer}')" class="answer">${answer}</button>`
         ).join('')}
         `;
@@ -68,18 +69,18 @@ function checkAnswer(selectedAnswer) {
         score++;
         resultContainer.textContent = "Correct!";
     } else {
-        timeLeft -= 5; // Deduct 5 seconds for incorrect answer
-        if (timeLeft < 0) timeLeft = 0; // Ensure time doesn't go negative
+        timeLeft -= 5;
+        if (timeLeft < 0) timeLeft = 0;
         resultContainer.textContent = "Incorrect!";
     }
     currentQuestionIndex++;
-    displayNextQuestion(); // Display the next question or end quiz if it was the last one
+    displayNextQuestion();
 }
 
 function startTimer() {
     timerInterval = setInterval(() => {
         timeLeft--;
-        displayTimer(); // Update timer display
+        displayTimer();
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
             endQuiz();
@@ -88,9 +89,26 @@ function startTimer() {
 }
 
 function endQuiz() {
-    clearInterval(timerInterval); // Stop the timer
+    clearInterval(timerInterval);
     questionContainer.classList.add('hide');
-    resultContainer.innerHTML += `<h3>Quiz Over!</h3><p>Your score: ${score}</p>`;
+    resultContainer.innerHTML = `
+        <h3>Quiz Over!</h3>
+        <p>Your score: ${score}</p>
+        <input type="text" id="initials" placeholder="Your Initials" maxlength="3" />
+        <button onclick="saveHighScore()">Submit</button>
+    `;
+}
+
+function saveHighScore() {
+    const initials = document.getElementById('initials').value.trim().toUpperCase();
+    if (!initials) {
+        alert('Please enter your initials!');
+        return;
+    }
+    console.log(`High Score Saved: ${initials} - ${score}`); // Placeholder for storing/further processing
+    // Example: localStorage.setItem('highScore', JSON.stringify({ initials, score }));
+
+    resultContainer.innerHTML = `<p>Thank you, ${initials}. Your score of ${score} has been saved!</p>`;
 }
 
 startButton.addEventListener('click', startQuiz);
