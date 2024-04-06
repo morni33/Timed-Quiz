@@ -10,3 +10,17 @@
 .hide {
     display: none;
 }
+
+#quiz-container {
+    position: relative;
+    /* This enables absolute positioning inside the container */
+}
+
+#timer-display {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    background-color: lightgray;
+    /* Example styling, adjust as needed */
+}
